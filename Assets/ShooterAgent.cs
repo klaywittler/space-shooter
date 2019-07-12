@@ -14,36 +14,47 @@ public class ShooterAgent : Agent
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        // GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
-        // if (gameControllerObject != null) {
-        //     GameController = gameControllerObject.GetComponent<gameController>();
-        // }
-        // if (gameControllerObject == null) {
-        //     Debug.Log ("Cannot find GameController script");
-        // }    
+        GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
+        if (gameControllerObject != null) {
+            GameController = gameControllerObject.GetComponent<gameController>();
+        }
+        if (gameControllerObject == null) {
+            Debug.Log ("Cannot find GameController script");
+        }  
+
+
     }
 
 
     public Transform Target;
-    // public override void AgentReset()
-    // {
-    //     if (this.transform.position.y < 0)
-    //     {
-    //         // If the Agent fell, zero its momentum
-    //         this.rBody.angularVelocity = Vector3.zero;
-    //         this.rBody.velocity = Vector3.zero;
-    //         this.transform.position = new Vector3( 0, 0.5f, 0);
-    //     }
+    public override void AgentReset()
+    {
+        if (GameController.gameOver)
+        {
+            // If the Agent fell, zero its momentum
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.position = new Vector3( 0, 0, 0);
+        }
 
-    //     // Move the target to a new spot
-    //     Target.position = new Vector3(Random.value * 8 - 4,
-    //                                   0.5f,
-    //                                   Random.value * 8 - 4);
-    // }
+        // destroy all asteroids
+        /*
+        for each asteriod in observation list
+            Object.Destroy(gameObject)
+        */
+        Target.position = new Vector3(Random.value * 8 - 4,
+                                      0.5f,
+                                      Random.value * 8 - 4);
+    }
 
 
     public override void CollectObservations()
     {
+
+    /*
+    for each asteriod in observation list
+        AddVectorObs
+    */
     // Target and Agent positions
     AddVectorObs(Target.position);
     AddVectorObs(this.transform.position);

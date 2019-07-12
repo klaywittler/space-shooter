@@ -8,6 +8,7 @@ public class gameController : MonoBehaviour {
     public float spawnWait;
     public float startWait;
     public float waveWait;
+    public GameObject observations;
 
     public GUIText scoreText;
     private int score;
@@ -16,7 +17,6 @@ public class gameController : MonoBehaviour {
 
     private bool gameOver;
 
-    private ShooterAgent shooter;
 
     IEnumerator spawnWaves() 
     {
@@ -28,6 +28,7 @@ public class gameController : MonoBehaviour {
                 Vector3 spawnPosition = new Vector3 (Random.Range(-spawnValue.x,spawnValue.x), spawnValue.y, spawnValue.z);
                 Quaternion spawnRotation = Quaternion.identity;
                 Instantiate(hazard, spawnPosition, spawnRotation);
+
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
@@ -49,11 +50,7 @@ public class gameController : MonoBehaviour {
 
     void Update () 
     {
-        if (gameOver) 
-        {
-            restartText.text = "Restarting";
-            Application.LoadLevel (Application.loadedLevel);
-        }
+
     }
     
     // Update is called once per frame
