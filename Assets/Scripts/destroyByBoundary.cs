@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class destroyByBoundary : MonoBehaviour {
+
+public class DestroyByBoundary : MonoBehaviour {
     void OnTriggerExit(Collider other) {
         Destroy(other.gameObject);
     }

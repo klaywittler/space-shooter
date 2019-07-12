@@ -1,20 +1,21 @@
 using UnityEngine;
 using System.Collections;
 
-public class destroyByContact : MonoBehaviour {
+
+public class DestroyByContact : MonoBehaviour {
     public GameObject explosion;
     public GameObject playerExplosion;
     public int scoreValue;
-    private gameController GameController;
-    // private ShooterAgent shooter;
+    private GameController gameController;
 
     void Start() {
         GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
         if (gameControllerObject != null) {
-            GameController = gameControllerObject.GetComponent<gameController>();
+
+            gameController = gameControllerObject.GetComponent<GameController>();
         }
         if (gameControllerObject == null) {
-            Debug.Log ("Cannot find GameController script");
+            Debug.Log ("Cannot find gameController script");
         }
     }
 
@@ -27,10 +28,9 @@ public class destroyByContact : MonoBehaviour {
         Instantiate(explosion, transform.position, transform.rotation);
         if (other.tag == "Player") {
             Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
-            GameController.GameOver();
-            // shooter.AgentReset();
+            gameController.GameOver();
         }
-        GameController.AddScore (scoreValue);
+        gameController.AddScore (scoreValue);
         Object.Destroy(other.gameObject);
         Object.Destroy(gameObject);
 }
