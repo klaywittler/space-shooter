@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
     public GameObject hazard;
@@ -9,15 +11,16 @@ public class GameController : MonoBehaviour {
     public float startWait;
     public float waveWait;
 
-    public GUIText scoreText;
+    public Text scoreText;
+    public Text restartText;
+    public Text gameOverText;
+
     private int score;
-    public GUIText restartText;
-    public GUIText gameOverText;
 
     private bool gameOver;
     private bool restart;
 
-    IEnumerator spawnWaves() {
+    IEnumerator SpawnWaves() {
         yield return new WaitForSeconds(startWait);
         while (true){
             for (int i=0; i<hazardCount; i++){
@@ -37,19 +40,24 @@ public class GameController : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
+        restartText = GameObject.FindWithTag("restartTextinCanvas").GetComponent<Text>();
+        gameOverText = GameObject.FindWithTag("gameOverTextinCanvas").GetComponent<Text>();
+        scoreText = GameObject.FindWithTag("scoreTextinCanvas").GetComponent<Text>();
+
         gameOver = false;
         restart = false;
         restartText.text = "";
         gameOverText.text = "";
         score = 0;
         UpdateScore ();
-        StartCoroutine (spawnWaves ());
+        StartCoroutine (SpawnWaves ());
     }
 
     void Update () {
         if (restart) {
             if (Input.GetKeyDown (KeyCode.R)) {
-                Application.LoadLevel (Application.loadedLevel);
+                // Application.LoadLevel (Application.loadedLevel);
+                SceneManager.LoadScene("main");
             }
         }
     }
