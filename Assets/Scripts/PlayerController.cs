@@ -8,13 +8,13 @@ public class Boundary {
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody rb;
-    public float speed;
+    public float speed = 10.0f;
     public Boundary boundary;
-    public float tilt;
+    public float tilt = 3.0f;
 
     public GameObject shot;
     public Transform shotSpawn;
-    public float fireRate;
+    public float fireRate = 0.25f;
     private float nextFire;
 
     private AudioSource audioSource;

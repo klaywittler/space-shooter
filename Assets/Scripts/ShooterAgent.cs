@@ -6,12 +6,23 @@ using MLAgents;
 public class ShooterAgent : Agent
 {
     private GameController gameController;
-    public Transform Target;
+    public float speed = 10.0f;
+    public Boundary boundary;
+    public float tilt = 3.0f;
+
+    public GameObject shot;
+    public Transform shotSpawn;
+    public float fireRate = 0.25f;
+    private float nextFire;
+
+    private AudioSource audioSource;
+
     Rigidbody rBody;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rBody = GetComponent<Rigidbody>();
         GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
         if (gameControllerObject != null) {
@@ -41,7 +52,9 @@ public class ShooterAgent : Agent
     {
         // Target and Agent positions
         foreach(GameObject go in gameController.observations){
-            AddVectorObs(go.localPosition);
+            AddVectorObs(go.transform.localPosition);
+            AddVectorObs(go.GetComponent<Rigidbody>().velocity.x);
+            AddVectorObs(go.GetComponent<Rigidbody>().velocity.z);
         }
         AddVectorObs(this.transform.localPosition);
         
@@ -50,31 +63,47 @@ public class ShooterAgent : Agent
         AddVectorObs(rBody.velocity.z);
     }
 
-    public float speed = 10;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        // Actions, size = 2
-        Vector3 controlSignal = Vector3.zero;
-        controlSignal.x = vectorAction[0];
-        controlSignal.z = vectorAction[1];
-        rBody.AddForce(controlSignal * speed);
+        // Actions, size = 3
+        Debug.Log ("vectorAction");
+        Debug.Log (vectorAction);
+        float moveHorizontal = vectorAction[0];
+        float moveVertical = vectorAction[1];
+        Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+        rBody.velocity = movement * speed;
         
-        // Rewards
-        float distanceToTarget = Vector3.Distance(this.transform.localPosition,
-                                                  Target.localPosition);
+        rBody.position = new Vector3 (
+            Mathf.Clamp (rBody.position.x, boundary.xMin, boundary.xMax),
+            0,
+            Mathf.Clamp (rBody.position.z, boundary.zMin, boundary.zMax)
+        );
         
-        // Reached target
-        if (distanceToTarget < 1.42f)
-        {
-            SetReward(1.0f);
-            Done();
-        }
-        
+        rBody.rotation = Quaternion.Euler (0, 0, rBody.velocity.x * -tilt);
 
-       if (gameController.gameOver)
+        if (Time.time > nextFire) {
+            if (vectorAction[2] == 1.0f) {
+                nextFire = Time.time + fireRate;
+                Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+                audioSource.Play();
+            }
+        }
+
+       if (gameController.restart)
         {
             Done();
         } 
         
     }
+
+    void OnTriggerEnter(Collider other) 
+    {
+        if (other.tag == "Boundary" || other.tag == "Player")
+        {
+            return;
+        }
+        SetReward(10.0f);
+
+    }
 }
+

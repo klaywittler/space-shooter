@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -7,10 +8,10 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
     public GameObject hazard;
     public Vector3 spawnValue;
-    public int hazardCount;
-    public float spawnWait;
-    public float startWait;
-    public float waveWait;
+    public int hazardCount = 10;
+    public float spawnWait = 0.5f;
+    public float startWait = 1.0f;
+    public float waveWait = 4.0f;
 
     public Text scoreText;
     public Text restartText;
@@ -21,7 +22,7 @@ public class GameController : MonoBehaviour {
     private bool gameOver;
     public bool restart;
 
-    public static List<GameObject> observations = new List<GameObject>();
+    public List<GameObject> observations = new List<GameObject>();
 
     IEnumerator SpawnWaves() {
         yield return new WaitForSeconds(startWait);

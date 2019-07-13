@@ -5,7 +5,7 @@ using System.Collections;
 public class DestroyByContact : MonoBehaviour {
     public GameObject explosion;
     public GameObject playerExplosion;
-    public int scoreValue;
+    public int scoreValue = 10;
     private GameController gameController;
 
     void Start() {
@@ -33,5 +33,6 @@ public class DestroyByContact : MonoBehaviour {
         gameController.AddScore (scoreValue);
         Object.Destroy(other.gameObject);
         Object.Destroy(gameObject);
+        gameController.observations.Remove(other.gameObject);
 }
 }

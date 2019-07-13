@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Mover : MonoBehaviour {
     private Rigidbody rb;
-    public float speed;
+    public float speed = 10.0f;
 
     // Use this for initialization
     void Start () {
