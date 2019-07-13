@@ -19,7 +19,9 @@ public class GameController : MonoBehaviour {
     private int score;
 
     private bool gameOver;
-    private bool restart;
+    public bool restart;
+
+    public static List<GameObject> observations = new List<GameObject>();
 
     IEnumerator SpawnWaves() {
         yield return new WaitForSeconds(startWait);
@@ -28,6 +30,7 @@ public class GameController : MonoBehaviour {
                 Vector3 spawnPosition = new Vector3 (Random.Range(-spawnValue.x,spawnValue.x), spawnValue.y, spawnValue.z);
                 Quaternion spawnRotation = Quaternion.identity;
                 Instantiate(hazard, spawnPosition, spawnRotation);
+                observations.Add(hazard);
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
@@ -57,7 +60,6 @@ public class GameController : MonoBehaviour {
     void Update () {
         if (restart) {
             if (Input.GetKeyDown (KeyCode.R)) {
-                // Application.LoadLevel (Application.loadedLevel);
                 SceneManager.LoadScene("main");
             }
         }
