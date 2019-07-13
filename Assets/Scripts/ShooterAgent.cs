@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
+// [System.Serializable]
+// public class Boundary {
+//     public float xMin, xMax, zMin, zMax;
+// }
+
 public class ShooterAgent : Agent
 {
     private GameController gameController;
